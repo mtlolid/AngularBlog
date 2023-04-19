@@ -1,0 +1,88 @@
+<header>
+    <h1>Angular Blog</h1>
+    <div>
+        <input (click)="addPost()" *ngIf="signUpCheck" type="button" value="Add post">
+        <input (click)="signIn()" *ngIf="!signUpCheck" type="button" value="Sing In">
+        <input *ngIf="signUpCheck" type="button" value= {{curentUser}} disabled=true>
+        <input (click)="signUp()" *ngIf="!signUpCheck" type="button" value="Sing Up">
+        <input  (click)="singOut()" *ngIf="signUpCheck" type="button" value="Sing Out">
+    </div>
+</header>
+
+<main>
+    <div class="post" *ngFor="let elem of blogs; let i=index">
+        <div class="post__left">
+            <h2> {{elem.topic}} </h2>
+            <p class="postedBy">Posted by: {{ elem.postedBy }}</p>
+            <p class="message">{{ elem.message }}</p>
+        </div>
+        <div class="post__rigth">
+            <p class="date">🕓{{ elem.date | date: "HH:mm, dd.MM.YYYY"}}</p>
+            <div *ngIf="curentUser == elem.postedBy || curentUser == 'admin' " >
+                <input (click)="editPost(i)" type="button" value="Edit">
+                <input (click)="deletePost(i)" type="button" value="Delete">
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="modalWrap" *ngIf="modalCheck">
+
+    <div class="modal">
+        <div class="modal__header">
+            <h2 *ngIf="signInCheck">Sign in</h2>
+            <h2 *ngIf="addPostCheck">Add post</h2>
+            <h2 *ngIf="signUpAddCheck">Sign up</h2>
+            <span (click)="modalClose()">✖</span>
+        </div>
+
+        <div class="modal__main">
+
+            <div class="signIn" *ngIf="signInCheck">
+                <p>Email:</p>
+                <input type="text" [(ngModel)]="signInEmail">
+                <p>Password:</p>
+                <input type="password" [(ngModel)]="signInPass">
+            </div>
+
+            <div class="addPost" *ngIf="addPostCheck">
+                <p>Title:</p>
+                <input [(ngModel)]="addPostTitle" type="text">
+                <p>Text:</p>
+                <textarea [(ngModel)]="addPostText" cols="30" rows="10"></textarea>
+            </div>
+
+            <div class="signUp" *ngIf="signUpAddCheck">
+                <p>Username:</p>
+                <input type="text" [(ngModel)]="signUpUsername">
+                <p>Email:</p>
+                <input type="text" [(ngModel)]="signUpEmail">
+                <p>Password:</p>
+                <input type="password" [(ngModel)]="signUpPassword">
+            </div>
+
+        </div>
+        <div class="modal__footer">
+
+            <div class="signIn" *ngIf="signInCheck" >
+                <input type="button" (click)="modalClose()" value="Close">
+                <input type="button" (click)="signInSubmit()" value="Submit">
+            </div>
+
+            <div class="addPost" *ngIf="addPostCheck">
+                <input type="button" (click)="modalClose()" value="Close">
+                <input type="button" *ngIf="!editCheck" (click)="addPostSubmit()" value="Post">
+                <input type="button" *ngIf="editCheck" (click)="savePost()" value="Save">
+            </div>
+
+            <div class="signUp" *ngIf="signUpAddCheck" >
+                <input type="button" (click)="modalClose()" value="Close">
+                <input type="button" (click)="signUpSubmit()" value="Submit">
+            </div>
+            
+
+        </div>
+    </div>
+
+</div>
+
